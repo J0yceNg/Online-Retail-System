@@ -9,6 +9,8 @@
 #include "db_parser.h"
 #include "product_parser.h"
 #include "util.h"
+#include "mydatastore.h"
+//#include "mydatastore.cpp"
 
 using namespace std;
 struct ProdNameSorter {
@@ -20,31 +22,33 @@ void displayProducts(vector<Product*>& hits);
 
 int main(int argc, char* argv[])
 {
+    std::cout << argv[1];
     if(argc < 2) {
         cerr << "Please specify a database file" << endl;
         return 1;
     }
+    std::cout << "Hey1";
 
     /****************
      * Declare your derived DataStore object here replacing
      *  DataStore type to your derived type
      ****************/
-    DataStore ds;
+    MyDataStore ds;
 
 
-
+    cout << "Hey2";
     // Instantiate the individual section and product parsers we want
     ProductSectionParser* productSectionParser = new ProductSectionParser;
     productSectionParser->addProductParser(new ProductBookParser);
     productSectionParser->addProductParser(new ProductClothingParser);
     productSectionParser->addProductParser(new ProductMovieParser);
     UserSectionParser* userSectionParser = new UserSectionParser;
-
+    cout << "Hey3";
     // Instantiate the parser
     DBParser parser;
     parser.addSectionParser("products", productSectionParser);
     parser.addSectionParser("users", userSectionParser);
-
+    cout << "Hey4";
     // Now parse the database to populate the DataStore
     if( parser.parse(argv[1], ds) ) {
         cerr << "Error parsing!" << endl;
@@ -100,10 +104,23 @@ int main(int argc, char* argv[])
                 done = true;
             }
 	    /* Add support for other commands here */
-
-
-
-
+            else if( cmd == "ADD"){ 
+                string username;
+                int index;
+                ss >> username;
+                ss >> index;
+                ds.addCart(username, hits[index-1]);
+            }
+            else if( cmd == "VIEWCART"){
+                string username;
+                ss >> username;
+                ds.viewCart(username);
+            }
+            else if( cmd == "BUYCART"){
+                string username;
+                ss >> username;
+                ds.buyCart(username);
+            }
             else {
                 cout << "Unknown command" << endl;
             }
