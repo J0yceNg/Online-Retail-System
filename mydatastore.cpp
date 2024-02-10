@@ -55,22 +55,23 @@ std::vector<Product*> MyDataStore::search(std::vector<std::string>& terms, int t
         return hits;
     }
     if(terms.size() == 1) { //one keyword
-        for(set<Product*>::iterator it = keywordsAndProducts_[terms[0]].begin(); it != keywordsAndProducts_[terms[0]].end(); ++it){
+        for(set<Product*>::iterator it = keywordsAndProducts_[convToLower(terms[0])].begin(); it != keywordsAndProducts_[convToLower(terms[0])].end(); ++it){
             hits.push_back(*it);
         }
         return hits;
     }
 
-    set<Product*> results = keywordsAndProducts_[terms[0]];
+    set<Product*> results = keywordsAndProducts_[convToLower(terms[0])];
 
     if(type == 0){ //AND search
         for(std::vector<std::string>::iterator it = terms.begin() + 1; it != terms.end(); ++it){
-            results = setIntersection(results, keywordsAndProducts_[*it]);
+
+            results = setIntersection(results, keywordsAndProducts_[convToLower(*it)]);
         }
     }
     else if(type == 1){ //OR search
         for(std::vector<std::string>::iterator it = terms.begin() + 1; it != terms.end(); ++it){
-            results = setUnion(results, keywordsAndProducts_[*it]);
+            results = setUnion(results, keywordsAndProducts_[convToLower(*it)]);
         }
     }
     for(set<Product*>::iterator it = results.begin(); it != results.end(); ++it){
@@ -127,9 +128,15 @@ void MyDataStore::viewCart(std::string username){
         cout << "Invalid username" << endl;
         return;
     }
-    for(std::vector<Product*>::iterator it = cart_[user->getName()].begin(); it != cart_[user->getName()].end(); ++it){
-        cout << "Item " << (std::distance(cart_[user->getName()].begin(), it) + 1) << endl; 
-        (*it)->displayString();
+    // for(std::vector<Product*>::iterator it = cart_[user->getName()].begin(); it != cart_[user->getName()].end(); ++it){
+    //     cout << "Item " << (std::distance(cart_[user->getName()].begin(), it) + 1) << endl; 
+    //     (*it)->displayString();
+    //     cout << endl;
+    // }
+    std::vector<Product*> cartProd = cart_[user->getName()];
+    for(unsigned int i = 0; i < cartProd.size(); i++){
+        cout << "Item " << (i + 1) << endl; 
+        cout << cartProd[i]->displayString() << endl;
         cout << endl;
     }
 }

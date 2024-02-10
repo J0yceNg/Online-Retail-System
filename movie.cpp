@@ -24,8 +24,9 @@ Movie::~Movie()
  */
 std::set<std::string> Movie::keywords() const{
     set<string> keys;
-    keys.insert(parseStringToWords(name_).begin(), parseStringToWords(name_).end());
-    keys.insert(genre_);
+    set<string> titlekeys = parseStringToWords(name_);
+        keys.insert(titlekeys.begin(), titlekeys.end());
+    keys.insert(convToLower(genre_));
     return keys;
 }
 
@@ -33,9 +34,10 @@ std::set<std::string> Movie::keywords() const{
  * Returns a string to display the product info for hits of the search
  */
 std::string Movie::displayString() const{
-    string info = name_ + "\nGenre: " + genre_ + " Rating: " + rating_
-    + "\n" + to_string(price_) + " " + to_string(qty_) + "left.\n";
-    return info;
+    std::ostringstream info;
+    info << name_ << "\n" << "Genre: " << genre_ << " Rating: " << rating_ << "\n"
+    << std::fixed << std::setprecision(2) << price_ << " " << qty_ << " left.\n";
+    return info.str();
 }
 
 /**

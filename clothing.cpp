@@ -23,8 +23,11 @@ Clothing::~Clothing()
  * Returns the appropriate keywords that this product should be associated with
  */
 std::set<std::string> Clothing::keywords() const{
-    set<string> keys = parseStringToWords(brand_);
-    keys.insert(parseStringToWords(name_).begin(), parseStringToWords(name_).end());
+    set<string> keys;
+    set<string> brandkeys = parseStringToWords(brand_);
+        keys.insert(brandkeys.begin(), brandkeys.end());
+    set<string> titlekeys = parseStringToWords(name_);
+        keys.insert(titlekeys.begin(), titlekeys.end());
     return keys;
 }
 
@@ -32,9 +35,10 @@ std::set<std::string> Clothing::keywords() const{
  * Returns a string to display the product info for hits of the search
  */
 std::string Clothing::displayString() const{
-    string info = name_ + "\nSize: " + size_ + " Brand: " + brand_
-    + "\n" + to_string(price_) + " " + to_string(qty_) + "left.\n";
-    return info;
+    std::ostringstream info;
+    info << name_ << "\n" << "Size: " << size_ << " Brand: " << brand_ << "\n"
+    << std::fixed << std::setprecision(2) << price_ << " " << qty_ << " left.\n";
+    return info.str();
 }
 
 /**

@@ -23,8 +23,11 @@ Book::~Book()
  * Returns the appropriate keywords that this product should be associated with
  */
 std::set<std::string> Book::keywords() const{
-    set<string> keys = parseStringToWords(author_);
-    keys.insert(parseStringToWords(name_).begin(), parseStringToWords(name_).end());
+    set<string> keys;
+    set<string> authorkeys = parseStringToWords(author_);
+        keys.insert(authorkeys.begin(), authorkeys.end());
+    set<string> titlekeys = parseStringToWords(name_);
+        keys.insert(titlekeys.begin(), titlekeys.end());
     keys.insert(isbn_);
     return keys;
 }
@@ -33,9 +36,10 @@ std::set<std::string> Book::keywords() const{
  * Returns a string to display the product info for hits of the search
  */
 std::string Book::displayString() const{
-    string info = name_ + "\nAuthor: " + author_ + " ISBN: " + isbn_
-    + "\n" + to_string(price_) + " " + to_string(qty_) + "left.\n";
-    return info;
+    std::ostringstream info;
+    info << name_ << "\n" << "Author: " << author_ << " ISBN: " << isbn_ << "\n"
+    << std::fixed << std::setprecision(2) << price_ << " " << qty_ << " left.\n";
+    return info.str();
 }
 
 /**

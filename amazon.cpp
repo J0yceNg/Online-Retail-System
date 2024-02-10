@@ -10,8 +10,7 @@
 #include "product_parser.h"
 #include "util.h"
 #include "mydatastore.h"
-//#include "mydatastore.cpp"
-
+ 
 using namespace std;
 struct ProdNameSorter {
     bool operator()(Product* p1, Product* p2) {
@@ -27,7 +26,6 @@ int main(int argc, char* argv[])
         cerr << "Please specify a database file" << endl;
         return 1;
     }
-    std::cout << "Hey1";
 
     /****************
      * Declare your derived DataStore object here replacing
@@ -36,19 +34,18 @@ int main(int argc, char* argv[])
     MyDataStore ds;
 
 
-    cout << "Hey2";
     // Instantiate the individual section and product parsers we want
     ProductSectionParser* productSectionParser = new ProductSectionParser;
     productSectionParser->addProductParser(new ProductBookParser);
     productSectionParser->addProductParser(new ProductClothingParser);
     productSectionParser->addProductParser(new ProductMovieParser);
     UserSectionParser* userSectionParser = new UserSectionParser;
-    cout << "Hey3";
+
     // Instantiate the parser
     DBParser parser;
     parser.addSectionParser("products", productSectionParser);
     parser.addSectionParser("users", userSectionParser);
-    cout << "Hey4";
+
     // Now parse the database to populate the DataStore
     if( parser.parse(argv[1], ds) ) {
         cerr << "Error parsing!" << endl;

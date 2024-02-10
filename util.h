@@ -14,12 +14,11 @@ template <typename T>
 std::set<T> setIntersection(std::set<T>& s1, std::set<T>& s2)
 {
     std::set<T> intersection;
-    typename std::set<T>::iterator it;
-
-    for(it = s1.begin(); it != s1.end(); it++){ //iterate through set 1
-        if(s2.find(*it) != s1.end()){ //look for intersections
+    for(typename std::set<T>::iterator it = s1.begin(); it != s1.end(); it++){ //iterate through set 1
+        if(s2.find(*it) != s2.end()){ //look for intersections
             intersection.insert(*it);
         }
+        
     } 
 
     return intersection;
